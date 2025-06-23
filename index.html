@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI Chip Strategy Quiz</title>
+  <title>Arty McFly's Quiz - TGM 598: AI, Chip Strategy, and the Future of Work</title>
   <style>
     body {
       background-color: #121212;
@@ -18,6 +18,7 @@
     }
     h1, h2, h3 {
       color: #90caf9;
+      text-align: center;
     }
     .question {
       font-weight: bold;
@@ -43,6 +44,8 @@
       border-radius: 5px;
       cursor: pointer;
       font-size: 1em;
+      display: block;
+      margin: 20px auto;
     }
     button:hover {
       background-color: #1565c0;
@@ -51,17 +54,24 @@
       font-size: 1.2em;
       margin-bottom: 10px;
       color: #ff9800;
+      text-align: center;
     }
     .hidden {
       display: none;
     }
     .result-correct { color: #66bb6a; }
     .result-incorrect { color: #ef5350; }
+    img.logo {
+      max-width: 150px;
+      display: block;
+      margin: 0 auto 10px;
+    }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>AI Chip Strategy Quiz</h1>
+    <img src="logo.png" alt="Arty McFly Logo" class="logo">
+    <h1>Arty McFly's Quiz - TGM 598: AI, Chip Strategy, and the Future of Work</h1>
     <div id="setup">
       <label>Mode:
         <select id="mode">
@@ -86,10 +96,9 @@
 
   <script>
     const questions = [
-      // Full 30+ questions go here (same structure as before, but I'll provide the file separately for upload)
       { q: "What is the primary value proposition of Suno AI?", options: ["AI-driven content generation", "AI-assisted music creation", "AI-enhanced chip design", "AI-based banking automation"], answer: 1, explanation: "Suno AI is designed for AI-assisted music creation." },
       { q: "AI value chain components typically include:", options: ["Data -> Models -> Insights -> Action", "Data -> Chips -> Infrastructure -> Profits", "Hardware -> Software -> Marketing -> Sales", "Networks -> Devices -> Users -> Profits"], answer: 0, explanation: "The AI value chain follows Data -> Models -> Insights -> Action." },
-      // Add the remaining 28+ questions similarly
+      // ✅ ADD THE FULL 30+ QUESTION SET HERE (I'll provide the JSON separately for you to paste)
     ];
 
     let current = 0;
