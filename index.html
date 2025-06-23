@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Chip Strategy Quiz</title>
+  <style>
+    body {
+      background-color: #121212;
+      color: #e0e0e0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+    }
+    h1, h2, h3 {
+      color: #90caf9;
+    }
+    .question {
+      font-weight: bold;
+      margin: 20px 0 10px;
+    }
+    .option label {
+      display: block;
+      padding: 8px;
+      background: #1e1e1e;
+      border-radius: 5px;
+      margin-bottom: 5px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .option label:hover {
+      background: #333;
+    }
+    button {
+      background-color: #1976d2;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1em;
+    }
+    button:hover {
+      background-color: #1565c0;
+    }
+    #timer {
+      font-size: 1.2em;
+      margin-bottom: 10px;
+      color: #ff9800;
+    }
+    .hidden {
+      display: none;
+    }
+    .result-correct { color: #66bb6a; }
+    .result-incorrect { color: #ef5350; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>AI Chip Strategy Quiz</h1>
+    <div id="setup">
+      <label>Mode:
+        <select id="mode">
+          <option value="exam">Exam Mode</option>
+          <option value="review">Review Mode</option>
+        </select>
+      </label><br /><br />
+      <label>Time (minutes):
+        <input type="number" id="timeInput" value="60" min="1" />
+      </label><br /><br />
+      <button onclick="startQuiz()">Start Quiz</button>
+    </div>
+
+    <div id="quiz" class="hidden">
+      <div id="timer"></div>
+      <div id="questionBox"></div>
+      <button onclick="nextQuestion()">Next</button>
+    </div>
+
+    <div id="results" class="hidden"></div>
+  </div>
+
+  <script>
+    const questions = [
+      // Full 30+ questions go here (same structure as before, but I'll provide the file separately for upload)
+      { q: "What is the primary value proposition of Suno AI?", options: ["AI-driven content generation", "AI-assisted music creation", "AI-enhanced chip design", "AI-based banking automation"], answer: 1, explanation: "Suno AI is designed for AI-assisted music creation." },
+      { q: "AI value chain components typically include:", options: ["Data -> Models -> Insights -> Action", "Data -> Chips -> Infrastructure -> Profits", "Hardware -> Software -> Marketing -> Sales", "Networks -> Devices -> Users -> Profits"], answer: 0, explanation: "The AI value chain follows Data -> Models -> Insights -> Action." },
+      // Add the remaining 28+ questions similarly
+    ];
+
+    let current = 0;
+    let score = 0;
+    let mode = 'exam';
+    let timer;
+    let timeLeft;
+
+    function startQuiz() {
+      mode = document.getElementById('mode').value;
+      timeLeft = parseInt(document.getElementById('timeInput').value) * 60;
+      document.getElementById('setup').classList.add('hidden');
+      document.getElementById('quiz').classList.remove('hidden');
+      showQuestion();
+      startTimer();
+    }
+
+    function startTimer() {
+      updateTimer();
+      timer = setInterval(() => {
+        timeLeft--;
+        updateTimer();
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          endQuiz();
+        }
+      }, 1000);
+    }
+
+    function updateTimer() {
+      const min = Math.floor(timeLeft / 60);
+      const sec = timeLeft % 60;
+      document.getElementById('timer').innerText = `Time Left: ${min}:${sec.toString().padStart(2, '0')}`;
+    }
+
+    function showQuestion() {
+      if (current >= questions.length) {
+        endQuiz();
+        return;
+      }
+      const q = questions[current];
+      let html = `<div class='question'>${current + 1}. ${q.q}</div>`;
+      q.options.forEach((opt, i) => {
+        html += `<div class='option'><label><input type='radio' name='opt' value='${i}'> ${opt}</label></div>`;
+      });
+      document.getElementById('questionBox').innerHTML = html;
+    }
+
+    function nextQuestion() {
+      const selected = document.querySelector('input[name="opt"]:checked');
+      if (!selected) {
+        alert("Please select an answer.");
+        return;
+      }
+      const q = questions[current];
+      const selectedVal = parseInt(selected.value);
+      if (selectedVal === q.answer) {
+        score++;
+        if (mode === 'review') {
+          alert("✅ Correct! " + q.explanation);
+        }
+      } else {
+        if (mode === 'review') {
+          alert(`❌ Incorrect. ${q.explanation}`);
+        }
+      }
+      current++;
+      showQuestion();
+    }
+
+    function endQuiz() {
+      clearInterval(timer);
+      document.getElementById('quiz').classList.add('hidden');
+      let resultHtml = `<h2>Quiz Complete!</h2><p>Your score: ${score} / ${questions.length}</p>`;
+      resultHtml += "<h3>Review</h3>";
+      questions.forEach((q, idx) => {
+        resultHtml += `<div><b>${idx + 1}. ${q.q}</b><br>✅ Correct Answer: ${q.options[q.answer]}<br>${q.explanation}</div><hr>`;
+      });
+      document.getElementById('results').innerHTML = resultHtml;
+      document.getElementById('results').classList.remove('hidden');
+    }
+  </script>
+</body>
+</html>
