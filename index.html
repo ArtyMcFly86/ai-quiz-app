@@ -3,252 +3,50 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Arty McFly's Quiz - TGM 598: AI, Chip Strategy, and the Future of Work</title>
+  <title>Test 2 - Quiz Without Shuffle</title>
   <style>
-    body { 
-      background-color: #f0f2f5; 
-      color: #333; 
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-      margin: 0; 
-      padding: 20px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-    }
-    .container { 
-      max-width: 800px; 
-      width: 100%;
-      margin: auto;
-      background: #ffffff;
-      padding: 40px;
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-      box-sizing: border-box;
-    }
-    h1, h2, h3 { 
-      color: #005f73; 
-      text-align: center; 
-    }
-    .question { 
-      font-weight: bold; 
-      font-size: 1.2em;
-      margin: 20px 0 15px; 
-    }
-    .option label { 
-      display: block; 
-      padding: 12px; 
-      background: #e9ecef; 
-      border-radius: 8px; 
-      margin-bottom: 8px; 
-      cursor: pointer; 
-      transition: background 0.3s, color 0.3s; 
-      border: 1px solid #ced4da;
-    }
-    .option label:hover { 
-      background: #dee2e6; 
-    }
-    .option input[type="radio"] {
-      display: none;
-    }
-    .option input[type="radio"]:checked + label {
-      background: #0077b6;
-      color: #fff;
-      border-color: #005f73;
-    }
-    button { 
-      background-color: #0077b6; 
-      color: #fff; 
-      border: none; 
-      padding: 15px 30px; 
-      border-radius: 8px; 
-      cursor: pointer; 
-      font-size: 1.1em; 
-      display: block; 
-      margin: 30px auto;
-      transition: background-color 0.3s;
-    }
-    button:hover { 
-      background-color: #023e8a; 
-    }
-    #timer { 
-      font-size: 1.3em; 
-      margin-bottom: 20px; 
-      color: #d62828; 
-      text-align: center; 
-      font-weight: bold;
-    }
-    .hidden { 
-      display: none; 
-    }
-    img.logo { 
-      max-width: 150px; 
-      display: block; 
-      margin: 0 auto 20px; 
-    }
-    #setup label {
-      display: block;
-      margin-bottom: 15px;
-      font-size: 1.1em;
-      font-weight: 500;
-    }
-    #setup select, #setup input {
-      width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-      box-sizing: border-box;
-    }
-    #results div {
-      background: #f8f9fa;
-      padding: 15px;
-      border-radius: 8px;
-      margin-bottom: 10px;
-      border-left: 5px solid #0077b6;
-    }
-    #results hr {
-      display: none;
-    }
+    body { background-color: #f0f2f5; color: #333; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+    .container { max-width: 800px; width: 100%; margin: auto; background: #ffffff; padding: 40px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); box-sizing: border-box; }
+    h1, h2 { color: #005f73; text-align: center; }
+    button { background-color: #0077b6; color: #fff; border: none; padding: 15px 30px; border-radius: 8px; cursor: pointer; font-size: 1.1em; display: block; margin: 30px auto; }
+    .hidden { display: none; }
+    img.logo { max-width: 150px; display: block; margin: 0 auto 20px; }
+    #setup label { display: block; margin-bottom: 15px; font-size: 1.1em; }
+    #setup select, #setup input { width: 100%; padding: 10px; margin-top: 5px; border-radius: 5px; border: 1px solid #ccc; box-sizing: border-box; }
   </style>
 </head>
 <body>
   <div class="container">
     <img src="ChatGPT Image Jun 23, 2025, 12_35_55 AM.png" alt="Arty McFly Logo" class="logo">
-    
-    <h1>Arty McFly's Quiz</h1>
-    <h2>TGM 598: AI, Chip Strategy, and the Future of Work</h2>
+    <h1>Test 2: Quiz Without Shuffle</h1>
+    <h2>Does it start now?</h2>
     <div id="setup">
-      <label for="mode">Mode:</label>
-      <select id="mode">
-        <option value="exam">Exam Mode</option>
-        <option value="review">Review Mode</option>
-      </select><br><br>
-      <label for="timeInput">Time (minutes):</label>
-      <input type="number" id="timeInput" value="60" min="1"><br><br>
-      <label for="numQuestionsInput">Number of Questions (Max 60):</label>
-      <input type="number" id="numQuestionsInput" value="10" min="1" max="60"><br><br>
+      <label>Number of Questions: <input type="number" id="numQuestionsInput" value="5" min="1" max="60"></label><br><br>
       <button id="startBtn">Start Quiz</button>
     </div>
     <div id="quiz" class="hidden">
-      <div id="timer"></div>
-      <div id="questionBox"></div>
-      <button id="nextBtn">Next</button>
+      <h1>Quiz Started!</h1>
     </div>
-    <div id="results" class="hidden"></div>
   </div>
 
   <script>
-    const allQuestions = [
-      { q: "What is the primary value proposition of Suno AI?", options: ["AI-driven content generation","AI-assisted music creation","AI-enhanced chip design","AI-based banking automation"], answer: 1, explanation: "Suno AI is designed for AI-assisted music creation." },
-      { q: "AI value chain components typically include:", options: ["Data -> Models -> Insights -> Action","Data -> Chips -> Infrastructure -> Profits","Hardware -> Software -> Marketing -> Sales","Networks -> Devices -> Users -> Profits"], answer: 0, explanation: "The AI value chain follows Data -> Models -> Insights -> Action." },
-      { q: "Lemonade uses AI primarily for:", options: ["Chip manufacturing","Insurance claims processing and fraud detection","AI-generated ads","Managing employee performance"], answer: 1, explanation: "Lemonade uses AI for claims processing and fraud detection." },
-      { q: "The Lemonade case demonstrated AI’s promise through:", options: ["Reduced customer trust","Enhanced efficiency and transparency","Increased manual processing time","Higher labor costs"], answer: 1, explanation: "AI improves operational efficiency and transparency." },
-      { q: "The IBM Watson case highlighted challenges in:", options: ["AI integration in healthcare","AI chip design failures","AI for social media","AI in autonomous vehicles"], answer: 0, explanation: "Watson faced difficulties integrating AI into healthcare." },
-      { q: "A key takeaway from the IBM case was:", options: ["AI always delivers rapid ROI","Mismatch between AI promise and actual results","Chips were too expensive to scale AI","AI replaced all doctors in the pilot"], answer: 1, explanation: "There was a gap between expectations and real-world results." },
-      { q: "The global AI chip supply chain is dominated by:", options: ["U.S. and Taiwan","Brazil and India","Russia and Germany","Australia and Canada"], answer: 0, explanation: "The U.S. and Taiwan lead AI chip production." },
-      { q: "One major risk of chip supply chain concentration is:", options: ["Oversupply of chips","Geopolitical vulnerabilities","Reduced R&D spending","Too many low-cost chips on the market"], answer: 1, explanation: "Concentration increases geopolitical risk." },
-      { q: "The U.S. CHIPS Act primarily aims to:", options: ["Regulate social media","Incentivize domestic semiconductor manufacturing","Subsidize electric vehicles","Fund space exploration"], answer: 1, explanation: "The CHIPS Act incentivizes domestic chip production." },
-      { q: "DBS Bank used AI to:", options: ["Create a cryptocurrency","Accelerate digital banking transformation","Build gaming applications","Manufacture chips"], answer: 1, explanation: "DBS Bank applied AI to its digital transformation." },
-      { q: "A key lesson from DBS Bank’s AI journey was:", options: ["AI success requires holistic organizational change","AI works best without human oversight","AI reduced need for customer service","AI eliminated all branches"], answer: 0, explanation: "Successful AI needs culture, process, and strategy alignment." },
-      { q: "Gamma AI focuses on:", options: ["Visual storytelling & presentations","AI chip manufacturing","Cloud infrastructure security","Music production"], answer: 0, explanation: "Gamma specializes in AI-driven presentations." },
-      { q: "NapkinAI primarily helps with:", options: ["Prototyping ideas visually","Coding apps","Manufacturing hardware","Blockchain analysis"], answer: 0, explanation: "NapkinAI is for quick visual prototyping." },
-      { q: "Fliki, Runway, and Sora are examples of:", options: ["AI video & content generation tools","AI security systems","AI chip manufacturers","AI for HR management"], answer: 0, explanation: "These tools generate media content via AI." },
-      { q: "AI’s impact on jobs is most likely to:", options: ["Eliminate all manual labor","Augment some roles while displacing others","Only affect factory workers","Have no impact on the workforce"], answer: 1, explanation: "AI automates some tasks and shifts job roles." },
-      { q: "A critical skill for the future workforce in an AI-driven world is:", options: ["Data literacy","Manual machining","Typewriting","Morse code"], answer: 0, explanation: "Data literacy enables effective AI collaboration." },
-      { q: "The Fourth Industrial Revolution is defined by:", options: ["Steam power","AI, IoT, and advanced computing","Coal energy","Horse-drawn transport"], answer: 1, explanation: "This revolution integrates digital and physical systems." },
-      { q: "Taiwan’s key role in AI chip production makes it:", options: ["A major player in global tech geopolitics","A leading oil exporter","Irrelevant to global chip supply","Dominant in agriculture"], answer: 0, explanation: "Taiwan is central to global chip supply chain." },
-      { q: "One reason countries invest in domestic chip manufacturing is to:", options: ["Increase dependence on imports","Improve supply chain security","Boost global oil production","Eliminate data centers"], answer: 1, explanation: "Domestic production enhances supply security." },
-      { q: "AI hardware acceleration often depends on:", options: ["GPUs and specialized chips","Typewriters","Steam engines","Dial-up modems"], answer: 0, explanation: "GPUs and AI chips accelerate AI workloads." },
-      { q: "One ethical concern with AI adoption is:", options: ["Job displacement","Chip overheating","Lack of electricity","Overproduction of bicycles"], answer: 0, explanation: "Automation can lead to workforce displacement." },
-      { q: "AI systems can create bias because:", options: ["They reflect bias in training data","They are always objective","They self-correct bias perfectly","Chips ensure fairness"], answer: 0, explanation: "AI mirrors biases present in data." },
-      { q: "Cursor and Replit are examples of:", options: ["AI-assisted coding tools","Semiconductor manufacturers","Financial institutions","AI for HR"], answer: 0, explanation: "These provide AI-powered coding assistance." },
-      { q: "A risk of rapid AI tool adoption is:", options: ["Over-reliance without proper governance","Reduced automation","Increased labor union strength","Excess supply of oil"], answer: 0, explanation: "Governance is needed to guide AI use." },
-      { q: "AI chip strategy affects:", options: ["National security","Just retail pricing","Only local businesses","The fishing industry"], answer: 0, explanation: "Chip strategy is critical for security interests." },
-      { q: "Runway’s AI tool is designed primarily for:", options: ["Video editing and creation","Hardware acceleration","Chip fabrication","HR analytics"], answer: 0, explanation: "Runway offers AI-driven video editing." },
-      { q: "Sora (OpenAI) focuses on:", options: ["Text-to-video AI generation","Chip design","HR payroll","Supply chain management"], answer: 0, explanation: "Sora generates video from text." },
-      { q: "A common feature across modern AI tools is:", options: ["Cloud-based deployment","Reliance on horse power","Manual data entry","Steam power"], answer: 0, explanation: "Cloud deployment is typical for AI tools." },
-      { q: "The future of work with AI will likely emphasize:", options: ["Human-AI collaboration","Complete job elimination","Return to typewriters","Elimination of all technology"], answer: 0, explanation: "Collaboration between humans and AI will grow." },
-      { q: "One driver behind the AI chip race is:", options: ["Competitive advantage in AI workloads","The need for more coal","Shortage of manual typewriters","Decline in internet usage"], answer: 0, explanation: "Organizations compete for chip superiority in AI." },
-      { q: "Which of the following is not a primary driver of national AI strategy?", options: ["Data availability","Semiconductor self-sufficiency","Natural resource abundance","Talent development"], answer: 2, explanation: "Natural resource abundance is not a core driver." },
-      { q: "Which region currently dominates advanced semiconductor manufacturing?", options: ["North America","Taiwan","Europe","Middle East"], answer: 1, explanation: "Taiwan leads in cutting-edge chip production." },
-      { q: "Which company is a global leader in AI chip design?", options: ["NVIDIA","Ford","Walmart","JPMorgan"], answer: 0, explanation: "NVIDIA pioneered AI chip design." },
-      { q: "A key advantage of edge AI chips is:", options: ["Higher latency","Greater privacy and faster local processing","Reduced need for hardware","Total elimination of cloud computing"], answer: 1, explanation: "Edge AI provides privacy and low latency." },
-      { q: "Which of these workforce trends is least associated with AI adoption?", options: ["Job task automation","Reskilling and upskilling","Decline in demand for digital skills","New AI governance roles"], answer: 2, explanation: "AI increases demand for digital skills." },
-      { q: "The “AI arms race” refers to:", options: ["The competition for developing powerful AI weapons","The competition among nations for AI supremacy","The competition between chip makers for military contracts","The race to automate manual labor"], answer: 1, explanation: "It refers to national competition for AI supremacy." },
-      { q: "Which of these ethical concerns is most associated with autonomous systems?", options: ["Supply chain resilience","Data privacy","Accountability for decisions","Infrastructure costs"], answer: 2, explanation: "Accountability for autonomous decisions is vital." },
-      { q: "The rise of AI has most significantly shifted workforce demand toward:", options: ["Manual labor","Cognitive and digital skills","Purely physical tasks","Agricultural work"], answer: 1, explanation: "Demand has shifted toward cognitive and digital skills." },
-      { q: "Which geopolitical factor most threatens semiconductor supply chains?", options: ["Oceanic pollution","Natural resource depletion","Rising tensions in the Taiwan Strait","Climate change policies"], answer: 2, explanation: "Taiwan Strait tensions pose a supply chain risk." },
-      { q: "What is the main reason AI requires advanced semiconductors?", options: ["AI models need massive computational power","AI chips are always cheaper to make","AI only works on mobile phones","AI reduces energy consumption"], answer: 0, explanation: "AI demands high-performance hardware for computation." },
-      { q: "One reason governments invest in domestic chip production is:", options: ["To reduce reliance on geopolitically sensitive regions","To slow technological progress","To outsource more manufacturing","To weaken domestic technology sectors"], answer: 0, explanation: "To improve supply security and reduce dependence." },
-      { q: "Which of these best describes the role of AI in the Fourth Industrial Revolution?", options: ["A minor supporting technology","A central driver reshaping industries and society","An outdated technology","A purely consumer product"], answer: 1, explanation: "AI is a central driver of the Fourth Industrial Revolution." },
-      { q: "AI chips are typically less energy intensive than general-purpose CPUs for AI tasks.", options: ["True","False"], answer: 0, explanation: "Specialized chips like GPUs/TPUs are more efficient." },
-      { q: "The majority of AI talent is concentrated in developing countries.", options: ["True","False"], answer: 1, explanation: "Most AI experts are in developed regions." },
-      { q: "Geopolitical tensions have no impact on the AI chip supply chain.", options: ["True","False"], answer: 1, explanation: "Tensions can severely disrupt chip supply." },
-      { q: "AI adoption is expected to create only job losses, not new job categories.", options: ["True","False"], answer: 1, explanation: "AI also creates new roles and opportunities." },
-      { q: "Semiconductor fabs require years of planning and billions of dollars to build.", options: ["True","False"], answer: 0, explanation: "Fabs involve extensive investment and time to construct." },
-      { q: "The future of work will likely demand more adaptability and continuous learning from workers.", options: ["True","False"], answer: 0, explanation: "Continuous learning is key in an AI-driven world." },
-      { q: "Open-source AI models reduce the need for specialized AI chips.", options: ["True","False"], answer: 1, explanation: "Open-source models still need high-performance hardware." },
-      { q: "AI governance is becoming a key priority for both corporations and governments.", options: ["True","False"], answer: 0, explanation: "Governance frameworks are crucial for responsible AI." },
-      { q: "The U.S. has complete semiconductor supply chain independence today.", options: ["True","False"], answer: 1, explanation: "The U.S. still relies on imports for advanced nodes." },
-      { q: "The majority of advanced chip manufacturing occurs in Europe.", options: ["True","False"], answer: 1, explanation: "Europe has limited advanced node capacity." },
-      { q: "AI tools can enhance productivity in both blue-collar and white-collar jobs.", options: ["True","False"], answer: 0, explanation: "AI augments various job types." },
-      { q: "AI’s impact on work is uniform across all industries.", options: ["True","False"], answer: 1, explanation: "Impact varies by sector and function." },
-      { q: "The term 'chiplet' refers to small modular components that can be combined into a larger chip.", options: ["True","False"], answer: 0, explanation: "Chiplets are modular building blocks within processors." },
-      { q: "AI is considered a general-purpose technology that will affect many sectors of the economy.", options: ["True","False"], answer: 0, explanation: "GPTs have broad applicability across industries." },
-      { q: "Most of the world’s AI chips are manufactured in the U.S.", options: ["True","False"], answer: 1, explanation: "Leading-edge manufacturing is concentrated in Taiwan and abroad." },
-      { q: "What does TPU stand for?", options: ["Technical Processing Unit","Tensor Processing Unit","Turbo Processing Unit","Teraflop Processing Unit"], answer: 1, explanation: "TPU stands for Tensor Processing Unit." },
-      { q: "Who developed the first commercially successful GPU optimized for AI?", options: ["NVIDIA","Intel","AMD","ARM"], answer: 0, explanation: "NVIDIA pioneered GPUs for AI workloads." },
-      { q: "What does Moore’s Law state?", options: ["CPU performance doubles each year","Number of transistors on a chip doubles approx every two years","GPU memory doubles every three years","Data storage doubles every year"], answer: 1, explanation: "Moore’s Law: transistor count doubles about every two years." }
-    ];
-
-    let selectedQuestions = [], current = 0, score = 0, mode, timer, timeLeft;
-
-    function shuffle(a) {
-      for (let i = a.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [a[i], a[j]] = [a[j], a[i]];
-      }
-    }
+    const allQuestions = [{ q: "Test Question 1?", options: ["A", "B"], answer: 0, explanation: "Expl." }]; // Dummy question
+    let selectedQuestions = [];
 
     document.getElementById('startBtn').onclick = startQuiz;
-    document.getElementById('nextBtn').onclick = nextQuestion;
 
     function startQuiz() {
-      mode = document.getElementById('mode').value;
       const n = parseInt(document.getElementById('numQuestionsInput').value, 10);
-      timeLeft = parseInt(document.getElementById('timeInput').value, 10) * 60;
       selectedQuestions = allQuestions.slice();
-      shuffle(selectedQuestions);
+      
+      // The shuffle function is NOT being called.
+      // shuffle(selectedQuestions); 
+      
       selectedQuestions = selectedQuestions.slice(0, n);
       document.getElementById('setup').classList.add('hidden');
       document.getElementById('quiz').classList.remove('hidden');
-      showQuestion();
-      startTimer();
+      console.log("Quiz started successfully without shuffling.");
     }
-
-    function startTimer() {
-      updateTimer();
-      timer = setInterval(() => {
-        timeLeft--;
-        updateTimer();
-        if (timeLeft <= 0) {
-          clearInterval(timer);
-          endQuiz();
-        }
-      }, 1000);
-    }
-
-    function updateTimer() {
-      const m = Math.floor(timeLeft / 60);
-      const s = timeLeft % 60;
-      document.getElementById('timer').innerText = `Time Left: ${m}:${s.toString().padStart(2, '0')}`;
-    }
-
-    function showQuestion() {
-      if (current >= selectedQuestions.length) {
-        return endQuiz();
-      }
-      const q = selectedQuestions[current];
-      let h = `<div class="question">${current + 1}. ${q.q}</div>`;
-      q.options.forEach((o, 
+  </script>
+</body>
+</html>
