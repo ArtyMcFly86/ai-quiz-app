@@ -1,150 +1,69 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Arty McFly's Quiz - TGM 598: AI, Chip Strategy, and the Future of Work</title>
+  <title>Arty McFly's Quiz - TGM 598</title>
   <style>
-    body { 
-      background-color: #f0f2f5; 
-      color: #333; 
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-      margin: 0; 
-      padding: 20px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-    }
-    .container { 
-      max-width: 800px; 
-      width: 100%;
-      margin: auto;
-      background: #ffffff;
-      padding: 40px;
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-      box-sizing: border-box;
-    }
-    h1, h2, h3 { 
-      color: #005f73; 
-      text-align: center; 
-    }
-    .question { 
-      font-weight: bold; 
-      font-size: 1.2em;
-      margin: 20px 0 15px; 
-    }
-    .option label { 
-      display: block; 
-      padding: 12px; 
-      background: #e9ecef; 
-      border-radius: 8px; 
-      margin-bottom: 8px; 
-      cursor: pointer; 
-      transition: background 0.3s, color 0.3s; 
-      border: 1px solid #ced4da;
-    }
-    .option label:hover { 
-      background: #dee2e6; 
-    }
-    .option input[type="radio"] {
-      display: none;
-    }
-    .option input[type="radio"]:checked + label {
-      background: #0077b6;
-      color: #fff;
-      border-color: #005f73;
-    }
-    button { 
-      background-color: #0077b6; 
-      color: #fff; 
-      border: none; 
-      padding: 15px 30px; 
-      border-radius: 8px; 
-      cursor: pointer; 
-      font-size: 1.1em; 
-      display: block; 
-      margin: 30px auto;
-      transition: background-color 0.3s;
-    }
-    button:hover { 
-      background-color: #023e8a; 
-    }
-    #timer { 
-      font-size: 1.3em; 
-      margin-bottom: 20px; 
-      color: #d62828; 
-      text-align: center; 
-      font-weight: bold;
-    }
-    .hidden { 
-      display: none; 
-    }
-    img.logo { 
-      max-width: 150px; 
-      display: block; 
-      margin: 0 auto 20px; 
-    }
-    #setup label {
-      display: block;
-      margin-bottom: 15px;
-      font-size: 1.1em;
-      font-weight: 500;
-    }
-    #setup select, #setup input {
-      width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-      box-sizing: border-box;
-    }
-    #results div {
-      background: #f8f9fa;
-      padding: 15px;
-      border-radius: 8px;
-      margin-bottom: 10px;
-      border-left: 5px solid #0077b6;
-    }
-    #results hr {
-      display: none;
-    }
+    body { background: #f0f2f5; color: #333; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+    .container { background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); max-width: 800px; width: 100%; box-sizing: border-box; }
+    h1, h2 { color: #005f73; text-align: center; margin: 10px 0; }
+    .hidden { display: none; }
+    .field { margin-bottom: 15px; }
+    label { display: block; margin-bottom: 5px; font-weight: 500; }
+    input[type="number"], select { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px; }
+    #timer { font-size: 1.2em; color: #d62828; text-align: center; margin-bottom: 10px; }
+    #progress { text-align: center; margin-bottom: 15px; }
+    .question { font-weight: bold; margin-bottom: 15px; }
+    .option { margin-bottom: 8px; }
+    .option label { display: block; padding: 10px; background: #e9ecef; border-radius: 6px; border: 1px solid #ced4da; cursor: pointer; transition: background 0.2s; }
+    .option label:hover { background: #dee2e6; }
+    .option input { display: none; }
+    .option input:checked + label { background: #0077b6; color: #fff; border-color: #005f73; }
+    button { background: #0077b6; color: #fff; border: none; padding: 12px 25px; border-radius: 6px; cursor: pointer; font-size: 1em; transition: background 0.2s; }
+    button:disabled { opacity: 0.6; cursor: not-allowed; }
+    button:hover:not(:disabled) { background: #023e8a; }
+    #results h2 { text-align: center; }
+    #results div { background: #f8f9fa; padding: 12px; border-left: 4px solid #0077b6; border-radius: 6px; margin-bottom: 8px; }
+    #restartBtn { display: block; margin: 20px auto 0; }
   </style>
 </head>
 <body>
   <div class="container">
-    <img src="ChatGPT Image Jun 23, 2025, 12_35_55 AM.png" alt="Arty McFly Logo" class="logo">
-    
     <h1>Arty McFly's Quiz</h1>
-    <h2>TGM 598: AI, Chip Strategy, and the Future of Work</h2>
-
-    <div id="setup">
-      <label for="mode">Mode:</label>
-      <select id="mode">
-        <option value="exam">Exam Mode</option>
-        <option value="review">Review Mode</option>
-      </select>
-      <br><br>
-      <label for="timeInput">Time (minutes):</label>
-      <input type="number" id="timeInput" value="60" min="1">
-      <br><br>
-      <label for="numQuestionsInput">Number of Questions (Max 60):</label>
-      <input type="number" id="numQuestionsInput" value="10" min="1" max="60">
-      <br><br>
-      <button id="startBtn">Start Quiz</button>
-    </div>
-
-    <div id="quiz" class="hidden">
-      <div id="timer"></div>
-      <div id="questionBox"></div>
-      <button id="nextBtn">Next</button>
-    </div>
-
-    <div id="results" class="hidden"></div>
+    <h2>TGM 598: AI, Chip Strategy, and the Future of Work</h2><div id="setup">
+  <div class="field">
+    <label for="mode">Mode:</label>
+    <select id="mode">
+      <option value="exam">Exam Mode</option>
+      <option value="review">Review Mode</option>
+    </select>
   </div>
+  <div class="field">
+    <label for="timeInput">Time (minutes):</label>
+    <input type="number" id="timeInput" value="60" min="1">
+  </div>
+  <div class="field">
+    <label for="numQuestionsInput">Number of Questions (Max 60):</label>
+    <input type="number" id="numQuestionsInput" value="10" min="1" max="60">
+  </div>
+  <button id="startBtn">Start Quiz</button>
+</div>
 
-  <script>
+<div id="quiz" class="hidden">
+  <div id="timer"></div>
+  <div id="progress"></div>
+  <div id="questionBox"></div>
+  <button id="nextBtn" disabled>Next</button>
+</div>
+
+<div id="results" class="hidden">
+  <h2>Quiz Complete!</h2>
+  <p id="score"></p>
+  <div id="reviewList"></div>
+  <button id="restartBtn">Restart Quiz</button>
+</div>
+
+  </div>  <script>
     document.addEventListener('DOMContentLoaded', () => {
       const allQuestions = [
         { q: "What is the primary value proposition of Suno AI?", options: ["AI-driven content generation","AI-assisted music creation","AI-enhanced chip design","AI-based banking automation"], answer: 1, explanation: "Suno AI is designed for AI-assisted music creation." },
@@ -208,41 +127,16 @@
         { q: "Who developed the first commercially successful GPU optimized for AI?", options: ["NVIDIA","Intel","AMD","ARM"], answer: 0, explanation: "NVIDIA pioneered GPUs for AI workloads." },
         { q: "What does Moore’s Law state?", options: ["CPU performance doubles each year","Number of transistors on a chip doubles approx every two years","GPU memory doubles every three years","Data storage doubles every year"], answer: 1, explanation: "Moore’s Law: transistor count doubles about every two years." }
       ];
-
-      let selectedQuestions = [], current = 0, score = 0, mode = 'exam', timer = null, timeLeft = 0;
-
-      const setupEl     = document.getElementById('setup');
-      const quizEl      = document.getElementById('quiz');
-      const resultsEl   = document.getElementById('results');
-      const timerEl     = document.getElementById('timer');
+      let selectedQuestions = [], current = 0, score = 0, mode = 'exam', timer, timeLeft;
+      const setupEl = document.getElementById('setup'), quizEl = document.getElementById('quiz'), resultsEl = document.getElementById('results');
+      const timerEl = document.getElementById('timer'), progressEl = document.getElementById('progress');
       const questionBox = document.getElementById('questionBox');
-      const startBtn    = document.getElementById('startBtn');
-      const nextBtn     = document.getElementById('nextBtn');
-
-      function shuffle(arr) {
-        for (let i = arr.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [arr[i], arr[j]] = [arr[j], arr[i]];
-        }
-      }
-
+      const startBtn = document.getElementById('startBtn'), nextBtn = document.getElementById('nextBtn'), restartBtn = document.getElementById('restartBtn');
+      function shuffle(arr) { for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [arr[i], arr[j]] = [arr[j], arr[i]]; } }
       startBtn.addEventListener('click', startQuiz);
       nextBtn.addEventListener('click', nextQuestion);
-
-      function startQuiz() {
-        clearInterval(timer);
-        current = 0;
-        score = 0;
-        resultsEl.innerHTML = '';
-        resultsEl.classList.add('hidden');
-
-        mode = document.getElementById('mode').value;
-        const n = Math.min(
-          parseInt(document.getElementById('numQuestionsInput').value, 10),
-          allQuestions.length
-        );
-        timeLeft = parseInt(document.getElementById('timeInput').value, 10) * 60;
-
-        selectedQuestions = allQuestions.slice();
-        shuffle(selectedQuestions);
-        selectedQuestions = selectedQuestions.slice(
+      restartBtn.addEventListener('click', () => location.reload());
+      function startQuiz() { clearInterval(timer); current = 0; score = 0; mode = document.getElementById('mode').value; const n = Math.min(parseInt(document.getElementById('numQuestionsInput').value,10), allQuestions.length); timeLeft = parseInt(document.getElementById('timeInput').value,10) * 60; selectedQuestions = allQuestions.slice(); shuffle(selectedQuestions); selectedQuestions = selectedQuestions.slice(0,n); setupEl.classList.add('hidden'); quizEl.classList.remove('hidden'); nextBtn.disabled = true; showQuestion(); startTimer(); }
+      function startTimer() { updateTimer(); timer = setInterval(() => { timeLeft--; updateTimer(); if (timeLeft<=0) endQuiz(); }, 1000); }
+      function updateTimer() { const m = Math.floor(timeLeft/60), s = timeLeft%60; timerEl.textContent = `Time Left: ${m}:${String(s).padStart(2,'0')}`; }
+      function showQuestion() { if (current>=selectedQuestions.length) return endQuiz(); const q = selectedQuestions[current]; progressEl.textContent = `Question ${current+1} of ${selectedQuestions.length}`; let html = `<div class="question">${q.q}</div>`; q.options.forEach((opt,i) => { html
