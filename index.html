@@ -114,7 +114,8 @@
 </head>
 <body>
   <div class="container">
-    <img src="https://i.imgur.com/your-logo.png" alt="Arty McFly Logo" class="logo">
+    <img src="ChatGPT Image Jun 23, 2025, 12_35_55 AM.png" alt="Arty McFly Logo" class="logo">
+    
     <h1>Arty McFly's Quiz</h1>
     <h2>TGM 598: AI, Chip Strategy, and the Future of Work</h2>
     <div id="setup">
@@ -203,7 +204,6 @@
 
     let selectedQuestions = [], current = 0, score = 0, mode, timer, timeLeft;
 
-    // This is the properly formatted and working shuffle function
     function shuffle(a) {
       for (let i = a.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -219,7 +219,7 @@
       const n = parseInt(document.getElementById('numQuestionsInput').value, 10);
       timeLeft = parseInt(document.getElementById('timeInput').value, 10) * 60;
       selectedQuestions = allQuestions.slice();
-      shuffle(selectedQuestions); // This line now works correctly
+      shuffle(selectedQuestions);
       selectedQuestions = selectedQuestions.slice(0, n);
       document.getElementById('setup').classList.add('hidden');
       document.getElementById('quiz').classList.remove('hidden');
@@ -250,4 +250,5 @@
         return endQuiz();
       }
       const q = selectedQuestions[current];
-      let h
+      let h = `<div class="question">${current + 1}. ${q.q}</div>`;
+      q.options.forEach((o, 
