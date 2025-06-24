@@ -8,59 +8,52 @@
     .container { background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); max-width: 800px; width: 100%; box-sizing: border-box; }
     h1, h2 { color: #005f73; text-align: center; margin: 10px 0; }
     .hidden { display: none; }
-    .field { margin-bottom: 15px; }
-    label { display: block; margin-bottom: 5px; font-weight: 500; }
-    input[type="number"], select { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px; }
-    #timer { font-size: 1.2em; color: #d62828; text-align: center; margin-bottom: 10px; }
+    label { display: block; margin: 15px 0 5px; font-weight: 500; }
+    select, input[type="number"] { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px; }
+    button { background: #0077b6; color: #fff; border: none; padding: 12px 25px; border-radius: 6px; cursor: pointer; font-size: 1em; transition: background 0.2s; margin-top: 20px; }
+    button:disabled { opacity: 0.6; cursor: not-allowed; }
+    button:hover:not(:disabled) { background: #023e8a; }
+    #timer { text-align: center; font-size: 1.2em; color: #d62828; margin-bottom: 10px; }
     #progress { text-align: center; margin-bottom: 15px; }
     .question { font-weight: bold; margin-bottom: 15px; }
     .option { margin-bottom: 8px; }
     .option label { display: block; padding: 10px; background: #e9ecef; border-radius: 6px; border: 1px solid #ced4da; cursor: pointer; transition: background 0.2s; }
     .option label:hover { background: #dee2e6; }
-    .option input { display: none; }
-    .option input:checked + label { background: #0077b6; color: #fff; border-color: #005f73; }
-    button { background: #0077b6; color: #fff; border: none; padding: 12px 25px; border-radius: 6px; cursor: pointer; font-size: 1em; transition: background 0.2s; }
-    button:disabled { opacity: 0.6; cursor: not-allowed; }
-    button:hover:not(:disabled) { background: #023e8a; }
-    #results h2 { text-align: center; }
+    .option input { margin-right: 8px; }
     #results div { background: #f8f9fa; padding: 12px; border-left: 4px solid #0077b6; border-radius: 6px; margin-bottom: 8px; }
-    #restartBtn { display: block; margin: 20px auto 0; }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>Arty McFly's Quiz</h1>
     <h2>TGM 598: AI, Chip Strategy, and the Future of Work</h2><div id="setup">
-  <div class="field">
-    <label for="mode">Mode:</label>
-    <select id="mode">
-      <option value="exam">Exam Mode</option>
-      <option value="review">Review Mode</option>
-    </select>
-  </div>
-  <div class="field">
-    <label for="timeInput">Time (minutes):</label>
-    <input type="number" id="timeInput" value="60" min="1">
-  </div>
-  <div class="field">
-    <label for="numQuestionsInput">Number of Questions (Max 60):</label>
-    <input type="number" id="numQuestionsInput" value="10" min="1" max="60">
-  </div>
-  <button id="startBtn">Start Quiz</button>
+  <label for="mode">Mode:</label>
+  <select id="mode">
+    <option value="exam">Exam Mode</option>
+    <option value="review">Review Mode</option>
+  </select>
+
+  <label for="time">Time (minutes):</label>
+  <input type="number" id="time" value="60" min="1">
+
+  <label for="qcount">Number of Questions:</label>
+  <input type="number" id="qcount" value="10" min="1" max="60">
+
+  <button id="start">Start Quiz</button>
 </div>
 
 <div id="quiz" class="hidden">
   <div id="timer"></div>
   <div id="progress"></div>
-  <div id="questionBox"></div>
-  <button id="nextBtn" disabled>Next</button>
+  <div id="question"></div>
+  <button id="next" disabled>Next</button>
 </div>
 
 <div id="results" class="hidden">
   <h2>Quiz Complete!</h2>
   <p id="score"></p>
-  <div id="reviewList"></div>
-  <button id="restartBtn">Restart Quiz</button>
+  <div id="review"></div>
+  <button id="restart">Restart Quiz</button>
 </div>
 
   </div>  <script>
@@ -127,16 +120,35 @@
         { q: "Who developed the first commercially successful GPU optimized for AI?", options: ["NVIDIA","Intel","AMD","ARM"], answer: 0, explanation: "NVIDIA pioneered GPUs for AI workloads." },
         { q: "What does Moore’s Law state?", options: ["CPU performance doubles each year","Number of transistors on a chip doubles approx every two years","GPU memory doubles every three years","Data storage doubles every year"], answer: 1, explanation: "Moore’s Law: transistor count doubles about every two years." }
       ];
-      let selectedQuestions = [], current = 0, score = 0, mode = 'exam', timer, timeLeft;
-      const setupEl = document.getElementById('setup'), quizEl = document.getElementById('quiz'), resultsEl = document.getElementById('results');
-      const timerEl = document.getElementById('timer'), progressEl = document.getElementById('progress');
-      const questionBox = document.getElementById('questionBox');
-      const startBtn = document.getElementById('startBtn'), nextBtn = document.getElementById('nextBtn'), restartBtn = document.getElementById('restartBtn');
-      function shuffle(arr) { for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [arr[i], arr[j]] = [arr[j], arr[i]]; } }
-      startBtn.addEventListener('click', startQuiz);
-      nextBtn.addEventListener('click', nextQuestion);
-      restartBtn.addEventListener('click', () => location.reload());
-      function startQuiz() { clearInterval(timer); current = 0; score = 0; mode = document.getElementById('mode').value; const n = Math.min(parseInt(document.getElementById('numQuestionsInput').value,10), allQuestions.length); timeLeft = parseInt(document.getElementById('timeInput').value,10) * 60; selectedQuestions = allQuestions.slice(); shuffle(selectedQuestions); selectedQuestions = selectedQuestions.slice(0,n); setupEl.classList.add('hidden'); quizEl.classList.remove('hidden'); nextBtn.disabled = true; showQuestion(); startTimer(); }
-      function startTimer() { updateTimer(); timer = setInterval(() => { timeLeft--; updateTimer(); if (timeLeft<=0) endQuiz(); }, 1000); }
-      function updateTimer() { const m = Math.floor(timeLeft/60), s = timeLeft%60; timerEl.textContent = `Time Left: ${m}:${String(s).padStart(2,'0')}`; }
-      function showQuestion() { if (current>=selectedQuestions.length) return endQuiz(); const q = selectedQuestions[current]; progressEl.textContent = `Question ${current+1} of ${selectedQuestions.length}`; let html = `<div class="question">${q.q}</div>`; q.options.forEach((opt,i) => { html
+      let selected = [], current = 0, score = 0, mode = 'exam', timer, timeLeft;
+      const setup = document.getElementById('setup'), quiz = document.getElementById('quiz'), results = document.getElementById('results');
+      const start = document.getElementById('start'), next = document.getElementById('next'), restart = document.getElementById('restart');
+      const timerEl = document.getElementById('timer'), progress = document.getElementById('progress'), questionEl = document.getElementById('question');
+      const scoreEl = document.getElementById('score'), reviewEl = document.getElementById('review');
+      function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } }
+      start.addEventListener('click', () => {
+        mode = document.getElementById('mode').value;
+        const count = parseInt(document.getElementById('qcount').value, 10);
+        const n = Math.min(count, allQuestions.length);
+        timeLeft = parseInt(document.getElementById('time').value, 10) * 60;
+        selected = allQuestions.slice(); shuffle(selected); selected = selected.slice(0, n);
+        setup.classList.add('hidden'); quiz.classList.remove('hidden'); next.disabled = true; current = 0; score = 0;
+        render(); startTimer();
+      });
+      next.addEventListener('click', () => {
+        const choice = document.querySelector('input[name="opt"]:checked');
+        if (!choice) return;
+        if (+choice.value === selected[current].answer) score++;
+        else if (mode === 'review') alert(`Incorrect. Correct: ${selected[current].options[selected[current].answer]}
+${selected[current].explanation}`);
+        current++; next.disabled = true; render();
+      });
+      restart.addEventListener('click', () => location.reload());
+      function startTimer() { updateTimer(); timer = setInterval(() => { timeLeft--; if (timeLeft <= 0) return end(); updateTimer(); }, 1000); }
+      function updateTimer() { const m = Math.floor(timeLeft/60); const s = timeLeft%60; timerEl.textContent = `Time Left: ${m}:${s<10?'0'+s:s}`; }
+      function render() {
+        if (current >= selected.length) return end();
+        progress.textContent = `Question ${current+1} of ${selected.length}`;
+        const q = selected[current];
+        let html = `<div class="question">${q.q}</div>`;
+        q.options.forEach((opt, i) =>
