@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -56,11 +55,7 @@
       color: #ff9800;
       text-align: center;
     }
-    .hidden {
-      display: none;
-    }
-    .result-correct { color: #66bb6a; }
-    .result-incorrect { color: #ef5350; }
+    .hidden { display: none; }
     img.logo {
       max-width: 150px;
       display: block;
@@ -82,128 +77,57 @@
       <label>Time (minutes):
         <input type="number" id="timeInput" value="60" min="1" />
       </label><br /><br />
+      <label>Number of Questions:
+        <input type="number" id="numQuestionsInput" value="10" min="1" />
+      </label><br /><br />
       <button onclick="startQuiz()">Start Quiz</button>
-    </div>
+    </div><div id="quiz" class="hidden">
+  <div id="timer"></div>
+  <div id="questionBox"></div>
+  <button onclick="nextQuestion()">Next</button>
+</div>
 
-    <div id="quiz" class="hidden">
-      <div id="timer"></div>
-      <div id="questionBox"></div>
-      <button onclick="nextQuestion()">Next</button>
-    </div>
+<div id="results" class="hidden"></div>
 
-    <div id="results" class="hidden"></div>
-  </div>
-
-  <script>
-    const questions = [
+  </div>  <script>
+    const allQuestions = [
       { q: "What is the primary value proposition of Suno AI?", options: ["AI-driven content generation", "AI-assisted music creation", "AI-enhanced chip design", "AI-based banking automation"], answer: 1, explanation: "Suno AI is designed for AI-assisted music creation." },
       { q: "AI value chain components typically include:", options: ["Data -> Models -> Insights -> Action", "Data -> Chips -> Infrastructure -> Profits", "Hardware -> Software -> Marketing -> Sales", "Networks -> Devices -> Users -> Profits"], answer: 0, explanation: "The AI value chain follows Data -> Models -> Insights -> Action." },
       { q: "Lemonade uses AI primarily for:", options: ["Chip manufacturing", "Insurance claims processing and fraud detection", "AI-generated ads", "Managing employee performance"], answer: 1, explanation: "Lemonade uses AI for claims processing and fraud detection." },
-      { q: "The IBM Watson case highlighted challenges in:", options: ["AI integration in healthcare", "AI chip design failures", "AI for social media", "AI in autonomous vehicles"], answer: 0, explanation: "Watson struggled with AI integration in healthcare." },
-      { q: "The global AI chip supply chain is dominated by:", options: ["U.S. and Taiwan", "Brazil and India", "Russia and Germany", "Australia and Canada"], answer: 0, explanation: "The U.S. and Taiwan dominate AI chip supply." },
-      { q: "The U.S. CHIPS Act primarily aims to:", options: ["Regulate social media", "Incentivize domestic semiconductor manufacturing", "Subsidize electric vehicles", "Fund space exploration"], answer: 1, explanation: "The CHIPS Act supports U.S. semiconductor manufacturing." },
-      { q: "DBS Bank used AI to:", options: ["Create a cryptocurrency", "Accelerate digital banking transformation", "Build gaming applications", "Manufacture chips"], answer: 1, explanation: "DBS Bank used AI to drive digital banking transformation." },
-      { q: "Gamma AI focuses on:", options: ["Visual storytelling & presentations", "AI chip manufacturing", "Cloud infrastructure security", "Music production"], answer: 0, explanation: "Gamma AI focuses on visual storytelling and presentations." },
-      { q: "NapkinAI primarily helps with:", options: ["Prototyping ideas visually", "Coding apps", "Manufacturing hardware", "Blockchain analysis"], answer: 0, explanation: "NapkinAI is for visual prototyping of ideas." },
-      { q: "Fliki, Runway, and Sora are examples of:", options: ["AI video & content generation tools", "AI security systems", "AI chip manufacturers", "AI for HR management"], answer: 0, explanation: "These are AI tools for video and content generation." },
-      { q: "AI’s impact on jobs is most likely to:", options: ["Eliminate all manual labor", "Augment some roles while displacing others", "Only affect factory workers", "Have no impact on the workforce"], answer: 1, explanation: "AI will augment some jobs and displace others." },
-      { q: "A critical skill for the future workforce in an AI-driven world is:", options: ["Data literacy", "Manual machining", "Typewriting", "Morse code"], answer: 0, explanation: "Data literacy is essential in an AI-driven world." },
-      { q: "The Fourth Industrial Revolution is defined by:", options: ["Steam power", "AI, IoT, and advanced computing", "Coal energy", "Horse-drawn transport"], answer: 1, explanation: "It is defined by AI, IoT, and advanced computing." },
+      { q: "The Lemonade case demonstrated AI’s promise through:", options: ["Reduced customer trust", "Enhanced efficiency and transparency", "Increased manual processing time", "Higher labor costs"], answer: 1, explanation: "AI improves operational efficiency and transparency." },
+      { q: "The IBM Watson case highlighted challenges in:", options: ["AI integration in healthcare", "AI chip design failures", "AI for social media", "AI in autonomous vehicles"], answer: 0, explanation: "Watson faced difficulties integrating AI into healthcare." },
+      { q: "A key takeaway from the IBM case was:", options: ["AI always delivers rapid ROI", "Mismatch between AI promise and actual results", "Chips were too expensive to scale AI", "AI replaced all doctors in the pilot"], answer: 1, explanation: "There was a gap between expectations and real-world results." },
+      { q: "The global AI chip supply chain is dominated by:", options: ["U.S. and Taiwan", "Brazil and India", "Russia and Germany", "Australia and Canada"], answer: 0, explanation: "The U.S. and Taiwan lead AI chip production." },
       { q: "One major risk of chip supply chain concentration is:", options: ["Oversupply of chips", "Geopolitical vulnerabilities", "Reduced R&D spending", "Too many low-cost chips on the market"], answer: 1, explanation: "Concentration increases geopolitical risk." },
-      { q: "Taiwan’s key role in AI chip production makes it:", options: ["A major player in global tech geopolitics", "A leading oil exporter", "Irrelevant to global chip supply", "Dominant in agriculture"], answer: 0, explanation: "Taiwan is critical in global tech geopolitics." },
-      { q: "One reason countries invest in domestic chip manufacturing is to:", options: ["Increase dependence on imports", "Improve supply chain security", "Boost global oil production", "Eliminate data centers"], answer: 1, explanation: "To secure the supply chain." },
-      { q: "AI hardware acceleration often depends on:", options: ["GPUs and specialized chips", "Typewriters", "Steam engines", "Dial-up modems"], answer: 0, explanation: "AI uses GPUs and specialized chips." },
-      { q: "One ethical concern with AI adoption is:", options: ["Job displacement", "Chip overheating", "Lack of electricity", "Overproduction of bicycles"], answer: 0, explanation: "Job displacement is a key concern." },
-      { q: "AI systems can create bias because:", options: ["They reflect bias in training data", "They are always objective", "They self-correct bias perfectly", "Chips ensure fairness"], answer: 0, explanation: "AI can reflect training data bias." },
-      { q: "Cursor and Replit are examples of:", options: ["AI-assisted coding tools", "Semiconductor manufacturers", "Financial institutions", "AI for HR"], answer: 0, explanation: "Cursor and Replit assist coding using AI." },
-      { q: "A risk of rapid AI tool adoption is:", options: ["Over-reliance without proper governance", "Reduced automation", "Increased labor union strength", "Excess supply of oil"], answer: 0, explanation: "Rapid adoption without governance is risky." },
-      { q: "AI chip strategy affects:", options: ["National security", "Just retail pricing", "Only local businesses", "The fishing industry"], answer: 0, explanation: "AI chip strategy impacts national security." },
-      { q: "Runway’s AI tool is designed primarily for:", options: ["Video editing and creation", "Hardware acceleration", "Chip fabrication", "HR analytics"], answer: 0, explanation: "Runway is for AI video editing and creation." },
-      { q: "Sora (OpenAI) focuses on:", options: ["Text-to-video AI generation", "Chip design", "HR payroll", "Supply chain management"], answer: 0, explanation: "Sora focuses on text-to-video generation." },
-      { q: "A common feature across modern AI tools is:", options: ["Cloud-based deployment", "Reliance on horse power", "Manual data entry", "Steam power"], answer: 0, explanation: "Modern AI tools are cloud-based." },
-      { q: "The future of work with AI will likely emphasize:", options: ["Human-AI collaboration", "Complete job elimination", "Return to typewriters", "Elimination of all technology"], answer: 0, explanation: "AI will emphasize human-AI collaboration." },
-      { q: "One driver behind the AI chip race is:", options: ["Competitive advantage in AI workloads", "The need for more coal", "Shortage of manual typewriters", "Decline in internet usage"], answer: 0, explanation: "AI chip race is driven by workload advantage." }
-    ];
-
-    let current = 0;
-    let score = 0;
-    let mode = 'exam';
-    let timer;
-    let timeLeft;
-
-    function startQuiz() {
-      mode = document.getElementById('mode').value;
-      timeLeft = parseInt(document.getElementById('timeInput').value) * 60;
-      document.getElementById('setup').classList.add('hidden');
-      document.getElementById('quiz').classList.remove('hidden');
-      showQuestion();
-      startTimer();
-    }
-
-    function startTimer() {
-      updateTimer();
-      timer = setInterval(() => {
-        timeLeft--;
-        updateTimer();
-        if (timeLeft <= 0) {
-          clearInterval(timer);
-          endQuiz();
-        }
-      }, 1000);
-    }
-
-    function updateTimer() {
-      const min = Math.floor(timeLeft / 60);
-      const sec = timeLeft % 60;
-      document.getElementById('timer').innerText = `Time Left: ${min}:${sec.toString().padStart(2, '0')}`;
-    }
-
-    function showQuestion() {
-      if (current >= questions.length) {
-        endQuiz();
-        return;
-      }
-      const q = questions[current];
-      let html = `<div class='question'>${current + 1}. ${q.q}</div>`;
-      q.options.forEach((opt, i) => {
-        html += `<div class='option'><label><input type='radio' name='opt' value='${i}'> ${opt}</label></div>`;
-      });
-      document.getElementById('questionBox').innerHTML = html;
-    }
-
-    function nextQuestion() {
-      const selected = document.querySelector('input[name="opt"]:checked');
-      if (!selected) {
-        alert("Please select an answer.");
-        return;
-      }
-      const q = questions[current];
-      const selectedVal = parseInt(selected.value);
-      if (selectedVal === q.answer) {
-        score++;
-        if (mode === 'review') {
-          alert("✅ Correct! " + q.explanation);
-        }
-      } else {
-        if (mode === 'review') {
-          alert(`❌ Incorrect. ${q.explanation}`);
-        }
-      }
-      current++;
-      showQuestion();
-    }
-
-    function endQuiz() {
-      clearInterval(timer);
-      document.getElementById('quiz').classList.add('hidden');
-      let resultHtml = `<h2>Quiz Complete!</h2><p>Your score: ${score} / ${questions.length}</p>`;
-      resultHtml += "<h3>Review</h3>";
-      questions.forEach((q, idx) => {
-        resultHtml += `<div><b>${idx + 1}. ${q.q}</b><br>✅ Correct Answer: ${q.options[q.answer]}<br>${q.explanation}</div><hr>`;
-      });
-      document.getElementById('results').innerHTML = resultHtml;
-      document.getElementById('results').classList.remove('hidden');
-    }
-  </script>
-</body>
-</html>
+      { q: "The U.S. CHIPS Act primarily aims to:", options: ["Regulate social media", "Incentivize domestic semiconductor manufacturing", "Subsidize electric vehicles", "Fund space exploration"], answer: 1, explanation: "The CHIPS Act incentivizes domestic chip production." },
+      { q: "DBS Bank used AI to:", options: ["Create a cryptocurrency", "Accelerate digital banking transformation", "Build gaming applications", "Manufacture chips"], answer: 1, explanation: "DBS Bank applied AI to its digital transformation." },
+      { q: "A key lesson from DBS Bank’s AI journey was:", options: ["AI success requires holistic organizational change", "AI works best without human oversight", "AI reduced need for customer service", "AI eliminated all branches"], answer: 0, explanation: "Successful AI needs culture, process, and strategy alignment." },
+      { q: "Gamma AI focuses on:", options: ["Visual storytelling & presentations", "AI chip manufacturing", "Cloud infrastructure security", "Music production"], answer: 0, explanation: "Gamma specializes in AI-driven presentations." },
+      { q: "NapkinAI primarily helps with:", options: ["Prototyping ideas visually", "Coding apps", "Manufacturing hardware", "Blockchain analysis"], answer: 0, explanation: "NapkinAI is for quick visual prototyping." },
+      { q: "Fliki, Runway, and Sora are examples of:", options: ["AI video & content generation tools", "AI security systems", "AI chip manufacturers", "AI for HR management"], answer: 0, explanation: "These tools generate media content via AI." },
+      { q: "AI’s impact on jobs is most likely to:", options: ["Eliminate all manual labor", "Augment some roles while displacing others", "Only affect factory workers", "Have no impact on the workforce"], answer: 1, explanation: "AI automates some tasks and shifts job roles." },
+      { q: "A critical skill for the future workforce in an AI-driven world is:", options: ["Data literacy", "Manual machining", "Typewriting", "Morse code"], answer: 0, explanation: "Data literacy enables effective AI collaboration." },
+      { q: "The Fourth Industrial Revolution is defined by:", options: ["Steam power", "AI, IoT, and advanced computing", "Coal energy", "Horse-drawn transport"], answer: 1, explanation: "This revolution integrates digital and physical systems." },
+      { q: "Taiwan’s key role in AI chip production makes it:", options: ["A major player in global tech geopolitics", "A leading oil exporter", "Irrelevant to global chip supply", "Dominant in agriculture"], answer: 0, explanation: "Taiwan is central to global chip supply chain." },
+      { q: "One reason countries invest in domestic chip manufacturing is to:", options: ["Increase dependence on imports", "Improve supply chain security", "Boost global oil production", "Eliminate data centers"], answer: 1, explanation: "Domestic production enhances supply security." },
+      { q: "AI hardware acceleration often depends on:", options: ["GPUs and specialized chips", "Typewriters", "Steam engines", "Dial-up modems"], answer: 0, explanation: "GPUs and AI chips accelerate AI workloads." },
+      { q: "One ethical concern with AI adoption is:", options: ["Job displacement", "Chip overheating", "Lack of electricity", "Overproduction of bicycles"], answer: 0, explanation: "Automation can lead to workforce displacement." },
+      { q: "AI systems can create bias because:", options: ["They reflect bias in training data", "They are always objective", "They self-correct bias perfectly", "Chips ensure fairness"], answer: 0, explanation: "AI mirrors biases present in data." },
+      { q: "Cursor and Replit are examples of:", options: ["AI-assisted coding tools", "Semiconductor manufacturers", "Financial institutions", "AI for HR"], answer: 0, explanation: "These provide AI-powered coding assistance." },
+      { q: "A risk of rapid AI tool adoption is:", options: ["Over-reliance without proper governance", "Reduced automation", "Increased labor union strength", "Excess supply of oil"], answer: 0, explanation: "Governance is needed to guide AI use." },
+      { q: "AI chip strategy affects:", options: ["National security", "Just retail pricing", "Only local businesses", "The fishing industry"], answer: 0, explanation: "Chip strategy is critical for security interests." },
+      { q: "Runway’s AI tool is designed primarily for:", options: ["Video editing and creation", "Hardware acceleration", "Chip fabrication", "HR analytics"], answer: 0, explanation: "Runway offers AI-driven video editing." },
+      { q: "Sora (OpenAI) focuses on:", options: ["Text-to-video AI generation", "Chip design", "HR payroll", "Supply chain management"], answer: 0, explanation: "Sora generates videos from text." },
+      { q: "A common feature across modern AI tools is:", options: ["Cloud-based deployment", "Reliance on horse power", "Manual data entry", "Steam power"], answer: 0, explanation: "Cloud deployment is typical for AI tools." },
+      { q: "The future of work with AI will likely emphasize:", options: ["Human-AI collaboration", "Complete job elimination", "Return to typewriters", "Elimination of all technology"], answer: 0, explanation: "Collaboration between humans and AI will grow." },
+      { q: "One driver behind the AI chip race is:", options: ["Competitive advantage in AI workloads", "The need for more coal", "Shortage of manual typewriters", "Decline in internet usage"], answer: 0, explanation: "Organizations compete for chip superiority in AI." },
+      { q: "Which of the following is not a primary driver of national AI strategy?", options: ["Data availability", "Semiconductor self-sufficiency", "Natural resource abundance", "Talent development"], answer: 2, explanation: "Natural resource abundance is not a core driver." },
+      { q: "Which region currently dominates advanced semiconductor manufacturing?", options: ["North America", "Taiwan", "Europe", "Middle East"], answer: 1, explanation: "Taiwan leads in cutting-edge chip production." },
+      { q: "What is one risk of a highly concentrated semiconductor supply chain?", options: ["Lower prices for consumers", "Increased innovation", "Geopolitical vulnerability", "Higher employment in all regions"], answer: 2, explanation: "Concentration risks geopolitical disruption." },
+      { q: "Which company is a global leader in AI chip design?", options: ["NVIDIA", "Ford", "Walmart", "JPMorgan"], answer: 0, explanation: "NVIDIA is renowned for AI chip design." },
+      { q: "AI systems can reinforce bias primarily because:", options: ["They are always programmed to be unethical", "They rely on biased training data", "They do not use data", "They are intentionally discriminatory"], answer: 1, explanation: "Bias in training data leads to biased outcomes." },
+      { q: "A key advantage of edge AI chips is:", options: ["Higher latency", "Greater privacy and faster local processing", "Reduced need for hardware", "Total elimination of cloud computing"], answer: 1, explanation: "Edge AI provides privacy and low latency." },
+      { q: "Which of these workforce trends is least associated with AI adoption?", options: ["Job task automation", "Reskilling and upskilling", "Decline in demand for digital skills", "New AI governance roles"], answer: 2, explanation: "AI increases demand for digital skills." },
+      { q: "The “AI arms race” refers to:", options: ["The competition for developing powerful AI weapons", "The competition among nations for AI supremacy", "The competition between chip makers for military contracts", "The race to automate manual labor"], answer: 1, explanation: "It describes nations competing for AI leadership." },
+      { q: "Which of these ethical concerns is most associated with autonomous systems?", options: ["Supply chain resilience", "Data privacy", "Accountability for decisions", "Infrastructure costs"], answer: 2, explanation: "Accountability in autonomous decisions is critical." },
+      { q: "The rise of AI has most significantly shifted workforce demand toward:\
