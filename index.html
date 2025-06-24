@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -26,37 +27,39 @@
 <body>
   <div class="container">
     <h1>Arty McFly's Quiz</h1>
-    <h2>TGM 598: AI, Chip Strategy, and the Future of Work</h2><div id="setup">
-  <label for="mode">Mode:</label>
-  <select id="mode">
-    <option value="exam">Exam Mode</option>
-    <option value="review">Review Mode</option>
-  </select>
+    <h2>TGM 598: AI, Chip Strategy, and the Future of Work</h2>
+    <div id="setup">
+      <label for="mode">Mode:</label>
+      <select id="mode">
+        <option value="exam">Exam Mode</option>
+        <option value="review">Review Mode</option>
+      </select>
 
-  <label for="time">Time (minutes):</label>
-  <input type="number" id="time" value="60" min="1">
+      <label for="time">Time (minutes):</label>
+      <input type="number" id="time" value="60" min="1">
 
-  <label for="qcount">Number of Questions:</label>
-  <input type="number" id="qcount" value="10" min="1" max="60">
+      <label for="qcount">Number of Questions:</label>
+      <input type="number" id="qcount" value="10" min="1" max="60">
 
-  <button id="start">Start Quiz</button>
-</div>
+      <button id="start">Start Quiz</button>
+    </div>
 
-<div id="quiz" class="hidden">
-  <div id="timer"></div>
-  <div id="progress"></div>
-  <div id="question"></div>
-  <button id="next" disabled>Next</button>
-</div>
+    <div id="quiz" class="hidden">
+      <div id="timer"></div>
+      <div id="progress"></div>
+      <div id="question"></div>
+      <button id="next" disabled>Next</button>
+    </div>
 
-<div id="results" class="hidden">
-  <h2>Quiz Complete!</h2>
-  <p id="score"></p>
-  <div id="review"></div>
-  <button id="restart">Restart Quiz</button>
-</div>
+    <div id="results" class="hidden">
+      <h2>Quiz Complete!</h2>
+      <p id="score"></p>
+      <div id="review"></div>
+      <button id="restart">Restart Quiz</button>
+    </div>
+  </div>
 
-  </div>  <script>
+  <script>
     document.addEventListener('DOMContentLoaded', () => {
       const allQuestions = [
         { q: "What is the primary value proposition of Suno AI?", options: ["AI-driven content generation","AI-assisted music creation","AI-enhanced chip design","AI-based banking automation"], answer: 1, explanation: "Suno AI is designed for AI-assisted music creation." },
@@ -105,7 +108,7 @@
         { q: "The majority of AI talent is concentrated in developing countries.", options: ["True","False"], answer: 1, explanation: "Most AI experts are in developed regions." },
         { q: "Geopolitical tensions have no impact on the AI chip supply chain.", options: ["True","False"], answer: 1, explanation: "Tensions can severely disrupt chip supply." },
         { q: "AI adoption is expected to create only job losses, not new job categories.", options: ["True","False"], answer: 1, explanation: "AI also creates new roles and opportunities." },
-        { q: "Semiconductor fabs require years of planning and billions of dollars to build.", options: ["True","False"], answer: 0, explanation: "Fabs involve extensive investment and time to construct." },
+        { q: "Semiconductor fabs require years of planning and and billions of dollars to build.", options: ["True","False"], answer: 0, explanation: "Fabs involve extensive investment and time to construct." },
         { q: "The future of work will likely demand more adaptability and continuous learning from workers.", options: ["True","False"], answer: 0, explanation: "Continuous learning is key in an AI-driven world." },
         { q: "Open-source AI models reduce the need for specialized AI chips.", options: ["True","False"], answer: 1, explanation: "Open-source models still need high-performance hardware." },
         { q: "AI governance is becoming a key priority for both corporations and governments.", options: ["True","False"], answer: 0, explanation: "Governance frameworks are crucial for responsible AI." },
@@ -120,12 +123,15 @@
         { q: "Who developed the first commercially successful GPU optimized for AI?", options: ["NVIDIA","Intel","AMD","ARM"], answer: 0, explanation: "NVIDIA pioneered GPUs for AI workloads." },
         { q: "What does Moore’s Law state?", options: ["CPU performance doubles each year","Number of transistors on a chip doubles approx every two years","GPU memory doubles every three years","Data storage doubles every year"], answer: 1, explanation: "Moore’s Law: transistor count doubles about every two years." }
       ];
+      
       let selected = [], current = 0, score = 0, mode = 'exam', timer, timeLeft;
       const setup = document.getElementById('setup'), quiz = document.getElementById('quiz'), results = document.getElementById('results');
       const start = document.getElementById('start'), next = document.getElementById('next'), restart = document.getElementById('restart');
       const timerEl = document.getElementById('timer'), progress = document.getElementById('progress'), questionEl = document.getElementById('question');
       const scoreEl = document.getElementById('score'), reviewEl = document.getElementById('review');
-      function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } }
+
+      function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1));[a[i], a[j]] = [a[j], a[i]]; } }
+
       start.addEventListener('click', () => {
         mode = document.getElementById('mode').value;
         const count = parseInt(document.getElementById('qcount').value, 10);
@@ -135,20 +141,61 @@
         setup.classList.add('hidden'); quiz.classList.remove('hidden'); next.disabled = true; current = 0; score = 0;
         render(); startTimer();
       });
+
       next.addEventListener('click', () => {
         const choice = document.querySelector('input[name="opt"]:checked');
         if (!choice) return;
         if (+choice.value === selected[current].answer) score++;
-        else if (mode === 'review') alert(`Incorrect. Correct: ${selected[current].options[selected[current].answer]}
-${selected[current].explanation}`);
+        else if (mode === 'review') alert(`Incorrect. Correct Answer: ${selected[current].options[selected[current].answer]}\n\nExplanation: ${selected[current].explanation}`);
         current++; next.disabled = true; render();
       });
+
       restart.addEventListener('click', () => location.reload());
+
       function startTimer() { updateTimer(); timer = setInterval(() => { timeLeft--; if (timeLeft <= 0) return end(); updateTimer(); }, 1000); }
+      
       function updateTimer() { const m = Math.floor(timeLeft/60); const s = timeLeft%60; timerEl.textContent = `Time Left: ${m}:${s<10?'0'+s:s}`; }
+
+      function end() {
+        clearInterval(timer);
+        quiz.classList.add('hidden');
+        results.classList.remove('hidden');
+        const accuracy = selected.length > 0 ? (score / selected.length) * 100 : 0;
+        scoreEl.textContent = `Your score: ${score} out of ${selected.length} (${accuracy.toFixed(2)}%)`;
+        
+        let reviewHTML = selected.map((q, i) => `
+          <div>
+            <p><strong>Question ${i + 1}:</strong> ${q.q}</p>
+            <p><strong>Correct Answer:</strong> ${q.options[q.answer]}</p>
+            <p><em>${q.explanation}</em></p>
+          </div>
+        `).join('');
+        reviewEl.innerHTML = reviewHTML;
+      }
+      
       function render() {
         if (current >= selected.length) return end();
-        progress.textContent = `Question ${current+1} of ${selected.length}`;
+        progress.textContent = `Question ${current + 1} of ${selected.length}`;
         const q = selected[current];
         let html = `<div class="question">${q.q}</div>`;
-        q.options.forEach((opt, i) =>
+        
+        // --- FIX IS HERE ---
+        // Complete the loop to generate HTML for each option
+        q.options.forEach((opt, i) => {
+          html += `<div class="option"><label><input type="radio" name="opt" value="${i}"> ${opt}</label></div>`;
+        });
+        
+        questionEl.innerHTML = html;
+        
+        // Add event listeners to the new radio buttons to enable the 'Next' button
+        document.querySelectorAll('input[name="opt"]').forEach(radio => {
+          radio.addEventListener('change', () => {
+            next.disabled = false;
+          });
+        });
+        // --- END OF FIX ---
+      }
+    });
+  </script>
+</body>
+</html>
