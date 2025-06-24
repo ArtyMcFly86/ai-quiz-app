@@ -18,11 +18,13 @@
     }
     .container { 
       max-width: 800px; 
+      width: 100%;
       margin: auto;
       background: #ffffff;
       padding: 40px;
       border-radius: 12px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      box-sizing: border-box;
     }
     h1, h2, h3 { 
       color: #005f73; 
@@ -88,6 +90,7 @@
       display: block;
       margin-bottom: 15px;
       font-size: 1.1em;
+      font-weight: 500;
     }
     #setup select, #setup input {
       width: 100%;
@@ -97,11 +100,21 @@
       border: 1px solid #ccc;
       box-sizing: border-box;
     }
+    #results div {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      border-left: 5px solid #0077b6;
+    }
+    #results hr {
+      display: none;
+    }
   </style>
 </head>
 <body>
   <div class="container">
-    <img src="https://assets-global.website-files.com/635c4eeb7833215802d36477/635c4eeb7833211728d364a2_62729a5027584e27863833f3_256.png" alt="Arty McFly Logo" class="logo">
+    <img src="https://i.imgur.com/your-logo.png" alt="Arty McFly Logo" class="logo">
     <h1>Arty McFly's Quiz</h1>
     <h2>TGM 598: AI, Chip Strategy, and the Future of Work</h2>
     <div id="setup">
@@ -112,7 +125,7 @@
       </select><br><br>
       <label for="timeInput">Time (minutes):</label>
       <input type="number" id="timeInput" value="60" min="1"><br><br>
-      <label for="numQuestionsInput">Number of Questions:</label>
+      <label for="numQuestionsInput">Number of Questions (Max 60):</label>
       <input type="number" id="numQuestionsInput" value="10" min="1" max="60"><br><br>
       <button id="startBtn">Start Quiz</button>
     </div>
@@ -190,6 +203,7 @@
 
     let selectedQuestions = [], current = 0, score = 0, mode, timer, timeLeft;
 
+    // This is the properly formatted and working shuffle function
     function shuffle(a) {
       for (let i = a.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -205,7 +219,7 @@
       const n = parseInt(document.getElementById('numQuestionsInput').value, 10);
       timeLeft = parseInt(document.getElementById('timeInput').value, 10) * 60;
       selectedQuestions = allQuestions.slice();
-      shuffle(selectedQuestions);
+      shuffle(selectedQuestions); // This line now works correctly
       selectedQuestions = selectedQuestions.slice(0, n);
       document.getElementById('setup').classList.add('hidden');
       document.getElementById('quiz').classList.remove('hidden');
@@ -236,11 +250,4 @@
         return endQuiz();
       }
       const q = selectedQuestions[current];
-      let h = `<div class="question">${current + 1}. ${q.q}</div>`;
-      q.options.forEach((o, i) => {
-        h += `<div class="option">
-                <input type="radio" id="opt${i}" name="opt" value="${i}">
-                <label for="opt${i}">${o}</label>
-              </div>`;
-      });
-      document.ge
+      let h
